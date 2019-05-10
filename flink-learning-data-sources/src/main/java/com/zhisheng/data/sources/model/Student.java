@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Desc:
- * Created by zhisheng on 2019-02-17
- * Blog: http://www.54tianzhisheng.cn/tags/Flink/
+ * @author Administrator
  */
 
 @Data
@@ -15,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Student {
     public int id;
-    public String name;
-    public String password;
-    public int age;
+    public String batch_no;
+    public String table_name;
+    public int task_type;
 }

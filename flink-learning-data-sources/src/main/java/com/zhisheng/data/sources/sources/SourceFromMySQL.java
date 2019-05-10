@@ -11,8 +11,7 @@ import java.sql.ResultSet;
 
 /**
  * Desc: 自定义 source，从 mysql 中读取数据
- * Created by zhisheng on 2019-02-17
- * Blog: http://www.54tianzhisheng.cn/tags/Flink/
+ * @author Administrator
  */
 public class SourceFromMySQL extends RichSourceFunction<Student> {
 
@@ -29,7 +28,7 @@ public class SourceFromMySQL extends RichSourceFunction<Student> {
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
         connection = getConnection();
-        String sql = "select * from Student;";
+        String sql = "select * from big_customer_task;";
         ps = this.connection.prepareStatement(sql);
     }
 
@@ -41,7 +40,8 @@ public class SourceFromMySQL extends RichSourceFunction<Student> {
     @Override
     public void close() throws Exception {
         super.close();
-        if (connection != null) { //关闭连接和释放资源
+        if (connection != null) {
+            //关闭连接和释放资源
             connection.close();
         }
         if (ps != null) {
@@ -61,9 +61,9 @@ public class SourceFromMySQL extends RichSourceFunction<Student> {
         while (resultSet.next()) {
             Student student = new Student(
                     resultSet.getInt("id"),
-                    resultSet.getString("name").trim(),
-                    resultSet.getString("password").trim(),
-                    resultSet.getInt("age"));
+                    resultSet.getString("batch_no").trim(),
+                    resultSet.getString("task_type").trim(),
+                    resultSet.getInt("task_type"));
             ctx.collect(student);
         }
     }
@@ -77,7 +77,7 @@ public class SourceFromMySQL extends RichSourceFunction<Student> {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             //注意，这里替换成你自己的mysql 数据库路径和用户名、密码
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8", "root", "root123456");
+            con = DriverManager.getConnection("jdbc:mysql://192.168.198.94:3306/cargo_admin?useUnicode=true&characterEncoding=UTF-8", "cargoadmin", "zq");
         } catch (Exception e) {
             System.out.println("-----------mysql get connection has exception , msg = "+ e.getMessage());
         }
