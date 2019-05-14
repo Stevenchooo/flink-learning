@@ -10,8 +10,7 @@ import java.sql.PreparedStatement;
 
 /**
  * Desc: sink 数据到 mysql
- * Created by zhisheng_tian on 2019-02-17
- * Blog: http://www.54tianzhisheng.cn/tags/Flink/
+ * @author Administrator
  */
 public class SinkToMySQL extends RichSinkFunction<Student> {
     PreparedStatement ps;
@@ -65,7 +64,7 @@ public class SinkToMySQL extends RichSinkFunction<Student> {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             //注意，替换成自己本地的 mysql 数据库地址和用户名、密码
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8", "root", "root123456");
+            con = DriverManager.getConnection("jdbc:mysql://192.168.198.94:3306/cargo_admin?useUnicode=true&characterEncoding=UTF-8", "cargoadmin", "zq");
         } catch (Exception e) {
             System.out.println("-----------mysql get connection has exception , msg = "+ e.getMessage());
         }

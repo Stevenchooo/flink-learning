@@ -14,11 +14,10 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 
 import java.util.Properties;
 
-import static com.zhisheng.common.constant.PropertiesConstants.METRICS_TOPIC;
+import static com.zhisheng.common.constant.PropertiesConstants.WORLD_TOPIC;
 
 /**
- * blog：http://www.54tianzhisheng.cn/
- * 微信公众号：zhisheng
+ * @author Administrator
  */
 public class Main {
     public static void main(String[] args) throws Exception{
@@ -27,12 +26,14 @@ public class Main {
         Properties props = KafkaConfigUtil.buildKafkaProps(parameterTool);
 
         SingleOutputStreamOperator<Student> student = env.addSource(new FlinkKafkaConsumer011<>(
-                parameterTool.get(METRICS_TOPIC),   //这个 kafka topic 需要和上面的工具类的 topic 一致
+                parameterTool.get(WORLD_TOPIC),
                 new SimpleStringSchema(),
                 props)).setParallelism(1)
-                .map(string -> GsonUtil.fromJson(string, Student.class)); //博客里面用的是 fastjson，这里用的是gson解析，解析字符串成 student 对象
+                .map(string -> GsonUtil.fromJson(string, Student.class));
+        //博客里面用的是 fastjson，这里用的是gson解析，解析字符串成 student 对象
 
-        student.addSink(new SinkToMySQL()); //数据 sink 到 mysql
+        // 数据Sink到Mysql
+        student.addSink(new SinkToMySQL());
 
         env.execute("Flink data sink");
     }
